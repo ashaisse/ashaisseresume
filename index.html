@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>asha isse</title>
+<meta name="description" content="Asha Isse: operations, client intake, and executive support. Los Angeles, CA.">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #3d1d7a;
+    --blue-deep: #260f55;
+    --royal: #6a45f0;
+    --mint: #ffb3dc;
+    --mist: #f4eefd;
+    --white: #ffffff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Archivo', sans-serif;
+    color: var(--blue);
+    background: var(--white);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  body.locked { overflow: hidden; height: 100vh; }
+  a { color: inherit; }
+  button { font-family: inherit; }
+  .mono { font-family: 'Space Mono', monospace; }
+
+  /* ---------- INTRO ---------- */
+  #intro {
+    position: fixed; inset: 0; z-index: 100;
+    background: var(--blue); color: var(--white);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 7vh; text-align: center; padding: 0 6vw;
+    transition: transform 1.1s cubic-bezier(.77, 0, .18, 1);
+  }
+  #intro.gone { transform: translateY(-100%); }
+  .asha {
+    display: flex; gap: 0.02em;
+    font-weight: 800; font-size: clamp(4.5rem, 24vw, 12rem);
+    line-height: 1; letter-spacing: -0.04em;
+  }
+  .asha span {
+    display: inline-block; opacity: 0;
+    transform: translateY(50px) rotate(7deg);
+    animation: rise 0.8s cubic-bezier(.2, .8, .2, 1) forwards;
+  }
+  .asha span:nth-child(1) { animation-delay: 0.1s; }
+  .asha span:nth-child(2) { animation-delay: 0.25s; }
+  .asha span:nth-child(3) { animation-delay: 0.4s; }
+  .asha span:nth-child(4) { animation-delay: 0.55s; }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+  @keyframes fadein { to { opacity: 1; } }
+
+  .env {
+    position: relative; width: min(290px, 72vw); aspect-ratio: 3 / 2;
+    background: none; border: 0; cursor: pointer; perspective: 900px;
+    opacity: 0; animation: fadein 0.7s 1.3s forwards;
+  }
+  .env .back { position: absolute; inset: 0; background: #efe6ff; border-radius: 6px; }
+  .env .letter {
+    position: absolute; left: 9%; right: 9%; top: 9%; height: 82%;
+    background: var(--white); border-radius: 4px; z-index: 2;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    color: var(--blue); font-weight: 800; font-size: 1.1rem;
+    transition: transform 0.9s 0.35s cubic-bezier(.2, .8, .2, 1);
+  }
+  .env .letter small { font-family: 'Space Mono', monospace; font-weight: 400; font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; }
+  .env .front {
+    position: absolute; inset: 0; z-index: 3; background: #ddd0fb; border-radius: 6px;
+    clip-path: polygon(0 0, 50% 52%, 100% 0, 100% 100%, 0 100%);
+  }
+  .env .flap {
+    position: absolute; left: 0; right: 0; top: 0; height: 56%; z-index: 4;
+    background: #cdbdf7; transform-origin: top center;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transition: transform 0.6s, z-index 0s 0.3s;
+  }
+  .env.open .flap { transform: rotateX(180deg); z-index: 1; }
+  .env.open .letter { transform: translateY(-70%); }
+  .env:hover:not(.open) { transform: translateY(-4px) rotate(-1.5deg); }
+  .hint { font-family: 'Space Mono', monospace; font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0; animation: fadein 0.7s 1.8s forwards; }
+
+  /* ---------- HEADER ---------- */
+  .bar {
+    background: var(--mist); text-align: center; padding: 9px 5vw;
+    font-size: 0.74rem; letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .bar a { text-decoration: underline; text-underline-offset: 3px; }
+  header.top {
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+    padding: 22px 5vw; background: var(--white);
+    position: sticky; top: 0; z-index: 50;
+  }
+  header .menu-btn, header .right a {
+    background: none; border: 0; cursor: pointer; color: var(--blue);
+    font-size: 0.85rem; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none;
+  }
+  header .right { text-align: right; }
+  .logo { font-weight: 800; font-size: clamp(1.3rem, 5vw, 1.8rem); letter-spacing: -0.03em; text-decoration: none; }
+  header .menu-btn:hover, header .right a:hover { color: var(--royal); }
+
+  #menu {
+    position: fixed; inset: 0; z-index: 90; background: var(--blue); color: var(--white);
+    display: flex; flex-direction: column; justify-content: center; padding: 0 8vw;
+    transform: translateX(-100%); transition: transform 0.6s cubic-bezier(.77, 0, .18, 1);
+  }
+  #menu.open { transform: none; }
+  #menu .close {
+    position: absolute; top: 24px; left: 5vw; background: none; border: 0; color: var(--white);
+    font-size: 0.85rem; letter-spacing: 0.16em; text-transform: uppercase; cursor: pointer;
+  }
+  #menu a {
+    display: block; text-decoration: none; font-weight: 800; font-size: clamp(2.6rem, 11vw, 5.5rem);
+    letter-spacing: -0.04em; line-height: 1.1; text-transform: lowercase; transition: color 0.3s, padding 0.3s;
+  }
+  #menu a:hover, #menu a.active { color: var(--mint); padding-left: 14px; }
+  #menu .foot { margin-top: 40px; font-size: 0.8rem; opacity: 0.8; }
+
+  /* ---------- PAGES ---------- */
+  .page[hidden] { display: none; }
+  .page.show { animation: pagein 0.6s ease; }
+  @keyframes pagein { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+  .hero {
+    background: radial-gradient(circle at 20% 10%, var(--royal) 0%, var(--blue) 45%, var(--blue-deep) 100%);
+    color: var(--white); position: relative; overflow: hidden;
+    padding: 12vh 5vw 14vh;
+  }
+  .hero-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 6vw; align-items: center; }
+  .hero h1 {
+    font-weight: 800; font-size: clamp(2.8rem, 8.5vw, 6rem); line-height: 0.98;
+    letter-spacing: -0.045em; text-transform: lowercase; margin-bottom: 26px;
+  }
+  .hero h1 em { font-style: normal; color: var(--mint); }
+  .hero p.lead { max-width: 480px; margin-bottom: 34px; opacity: 0.92; }
+  .btns { display: flex; gap: 14px; flex-wrap: wrap; }
+  .pill {
+    display: inline-block; background: var(--white); color: var(--blue);
+    padding: 15px 38px; border-radius: 999px; text-decoration: none; border: 1px solid var(--white);
+    font-size: 0.82rem; letter-spacing: 0.16em; text-transform: uppercase; cursor: pointer;
+    transition: transform 0.25s, background 0.25s, color 0.25s;
+  }
+  .pill:hover { transform: translateY(-3px); background: var(--mint); border-color: var(--mint); }
+  .pill.ghost { background: transparent; color: var(--white); }
+  .pill.ghost:hover { background: var(--white); color: var(--blue); border-color: var(--white); }
+  .pill.solid { background: var(--blue); color: var(--white); border-color: var(--blue); }
+  .pill.solid:hover { background: var(--royal); border-color: var(--royal); }
+
+  .spark { position: absolute; width: 54px; height: 54px; stroke: rgba(255,255,255,0.75); fill: none; stroke-width: 1.6; stroke-linecap: round; animation: twinkle 3.5s ease-in-out infinite; }
+  .spark.s1 { top: 8%; left: 6%; }
+  .spark.s2 { top: 62%; left: 44%; width: 36px; height: 36px; animation-delay: 1s; }
+  .spark.s3 { top: 14%; right: 9%; width: 42px; height: 42px; animation-delay: 2s; }
+  @keyframes twinkle { 0%, 100% { transform: scale(1) rotate(0); opacity: 0.9; } 50% { transform: scale(0.7) rotate(25deg); opacity: 0.35; } }
+
+  .stack { position: relative; display: flex; flex-direction: column; gap: 10px; padding: 20px 0 50px; }
+  .foil {
+    display: flex; justify-content: space-between; align-items: center; text-decoration: none;
+    padding: 0 22px; height: 62px; border-radius: 14px; color: var(--blue-deep);
+    background-image:
+      radial-gradient(circle at 3px 3px, rgba(255,255,255,0.8) 1px, transparent 1.6px),
+      linear-gradient(120deg, #fbf8ff 0%, #beb2dc 38%, #f5f0ff 58%, #9d8fc2 100%);
+    background-size: 7px 7px, 100% 100%;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.28);
+    font-family: 'Space Mono', monospace; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase;
+    transition: transform 0.35s;
+  }
+  .foil:nth-child(odd) { transform: rotate(-3deg); }
+  .foil:nth-child(even) { transform: rotate(2.5deg) translateX(18px); }
+  .foil:hover { transform: rotate(0) translateX(8px) scale(1.03); }
+  .foil b { font-family: 'Archivo', sans-serif; font-weight: 800; font-size: 1rem; text-transform: lowercase; letter-spacing: -0.02em; }
+  .tag {
+    position: absolute; right: -4px; bottom: -6px; transform: rotate(-5deg);
+    background: var(--mint); color: var(--blue-deep); padding: 14px 18px; border-radius: 8px;
+    font-family: 'Space Mono', monospace; font-size: 0.7rem; line-height: 1.7; text-transform: uppercase;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.3);
+  }
+
+  .ticker { background: var(--mint); color: var(--blue-deep); overflow: hidden; white-space: nowrap; padding: 14px 0; }
+  .ticker div { display: inline-block; animation: slide 26s linear infinite; font-weight: 800; font-size: 1.1rem; letter-spacing: 0.04em; text-transform: uppercase; }
+  .ticker span { margin: 0 22px; }
+  @keyframes slide { to { transform: translateX(-50%); } }
+
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 11vh 5vw; }
+  h2.title { font-weight: 800; font-size: clamp(2.2rem, 7vw, 4.2rem); letter-spacing: -0.04em; line-height: 1; text-transform: lowercase; margin-bottom: 38px; }
+  .kicker { font-family: 'Space Mono', monospace; font-size: 0.74rem; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 14px; color: var(--royal); }
+
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 18px; }
+  .stat { background: var(--mist); border-radius: 18px; padding: 30px 26px; }
+  .stat .n { font-weight: 800; font-size: clamp(2.6rem, 8vw, 3.8rem); letter-spacing: -0.05em; line-height: 1; }
+  .stat p { margin-top: 10px; font-size: 0.92rem; }
+
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; }
+  .tile {
+    display: flex; flex-direction: column; justify-content: flex-end; min-height: 320px;
+    border-radius: 20px; padding: 28px; text-decoration: none; color: var(--white);
+    transition: transform 0.35s;
+  }
+  .tile:hover { transform: translateY(-8px) rotate(-0.6deg); }
+  .tile h3 { font-weight: 800; font-size: 2rem; letter-spacing: -0.04em; text-transform: lowercase; }
+  .tile p { font-size: 0.92rem; opacity: 0.9; margin-top: 4px; }
+  .tile .go { margin-top: 16px; font-family: 'Space Mono', monospace; font-size: 0.74rem; letter-spacing: 0.16em; text-transform: uppercase; }
+  .tile.a { background: var(--blue); }
+  .tile.b { background: var(--royal); }
+  .tile.c { background: var(--mint); color: var(--blue-deep); }
+
+  .role { display: grid; grid-template-columns: 0.4fr 1fr; gap: 4vw; padding: 38px 0; border-top: 1.5px solid var(--blue); }
+  .role .meta { font-family: 'Space Mono', monospace; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; }
+  .role .meta .when { display: inline-block; background: var(--mint); color: var(--blue-deep); padding: 4px 12px; border-radius: 999px; margin-bottom: 12px; }
+  .role h3 { font-weight: 800; font-size: clamp(1.5rem, 4vw, 2.1rem); letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 14px; }
+  .role ul { padding-left: 20px; }
+  .role li { margin-bottom: 8px; }
+  .role:hover h3 { color: var(--royal); }
+
+  .cloud { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 52px; }
+  .cloud span {
+    border: 1.5px solid var(--blue); border-radius: 999px; padding: 10px 24px; font-weight: 500;
+    transition: background 0.25s, color 0.25s, transform 0.25s;
+  }
+  .cloud span:hover { background: var(--blue); color: var(--white); transform: rotate(-3deg) scale(1.05); }
+  .edu { background: var(--blue); color: var(--white); border-radius: 22px; padding: 40px 34px; }
+  .edu h3 { font-weight: 800; font-size: 1.8rem; letter-spacing: -0.03em; margin: 6px 0; }
+
+  .contact-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 6vw; }
+  .contact-grid .info p { margin-bottom: 18px; max-width: 380px; }
+  .big-mail { font-weight: 800; font-size: clamp(1.3rem, 4vw, 1.9rem); letter-spacing: -0.03em; word-break: break-all; }
+  form { display: flex; flex-direction: column; gap: 18px; }
+  label { font-family: 'Space Mono', monospace; font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; display: block; margin-bottom: 6px; }
+  input, textarea, select {
+    width: 100%; border: 1.5px solid var(--blue); border-radius: 14px; padding: 14px 18px;
+    font-family: 'Archivo', sans-serif; font-size: 1rem; color: var(--blue); background: var(--white);
+  }
+  input:focus, textarea:focus, select:focus { outline: 3px solid var(--mint); }
+  textarea { min-height: 150px; resize: vertical; }
+  .note { font-size: 0.85rem; opacity: 0.8; }
+
+  footer { background: var(--blue-deep); color: var(--white); text-align: center; padding: 7vh 5vw; }
+  footer .big { font-weight: 800; font-size: clamp(2rem, 8vw, 4rem); letter-spacing: -0.04em; text-transform: lowercase; }
+  footer p { margin-top: 8px; font-size: 0.8rem; opacity: 0.75; }
+
+  .js .reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.7s, transform 0.7s; }
+  .js .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 800px) {
+    .hero-grid, .contact-grid, .role { grid-template-columns: 1fr; }
+    .foil:nth-child(even) { transform: rotate(2.5deg) translateX(8px); }
+    .tag { right: 4px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01s !important; transition-duration: 0.01s !important; }
+  }
+</style>
+</head>
+<body class="locked">
+<script>document.documentElement.classList.add('js');</script>
+
+<!-- INTRO -->
+<div id="intro">
+  <div class="asha" aria-label="Asha"><span>A</span><span>S</span><span>H</span><span>A</span></div>
+  <button class="env" id="env" aria-label="Open the envelope to enter the website">
+    <div class="back"></div>
+    <div class="letter">asha isse<small>you've got mail</small></div>
+    <div class="front"></div>
+    <div class="flap"></div>
+  </button>
+  <div class="hint">tap the envelope to open</div>
+</div>
+
+<!-- MENU -->
+<nav id="menu" aria-label="Main menu">
+  <button class="close" id="menuClose">Close ✕</button>
+  <a href="#/home" data-link="home">home</a>
+  <a href="#/work" data-link="work">work</a>
+  <a href="#/toolkit" data-link="toolkit">toolkit</a>
+  <a href="#/contact" data-link="contact">contact</a>
+  <div class="foot mono">LOS ANGELES, CA · OPEN TO NEW OPPORTUNITIES</div>
+</nav>
+
+<div class="bar">Open to new opportunities · <a href="#/contact">Get in touch</a></div>
+
+<header class="top">
+  <div><button class="menu-btn" id="menuBtn">Menu</button></div>
+  <a class="logo" href="#/home">asha isse</a>
+  <div class="right"><a href="#/contact">Contact</a></div>
+</header>
+
+<main>
+
+  <!-- HOME -->
+  <section class="page" data-page="home">
+    <div class="hero">
+      <svg class="spark s1" viewBox="0 0 50 50"><path d="M25 3 L30 20 L47 25 L30 30 L25 47 L20 30 L3 25 L20 20 Z"/></svg>
+      <svg class="spark s2" viewBox="0 0 50 50"><path d="M25 3 L30 20 L47 25 L30 30 L25 47 L20 30 L3 25 L20 20 Z"/></svg>
+      <svg class="spark s3" viewBox="0 0 50 50"><path d="M25 3 L30 20 L47 25 L30 30 L25 47 L20 30 L3 25 L20 20 Z"/></svg>
+      <div class="hero-grid">
+        <div>
+          <div class="kicker" style="color:var(--mint)">operations · client intake · executive support</div>
+          <h1>running things <em>smoothly</em>, from first hello to launch day.</h1>
+          <p class="lead">I'm Asha. I support executives and multi-site teams across law, hospitality, and nonprofit work, building the systems that keep everyone aligned.</p>
+          <div class="btns">
+            <a class="pill" href="#/work">View work</a>
+            <a class="pill ghost" href="#/contact">Say hello</a>
+          </div>
+        </div>
+        <div class="stack">
+          <a class="foil" href="#/work"><span>01 · 2026–now</span><b>counts law firm</b></a>
+          <a class="foil" href="#/work"><span>02 · 2025–now</span><b>gobiotix</b></a>
+          <a class="foil" href="#/work"><span>03 · 2024–25</span><b>prince st. pizza</b></a>
+          <a class="foil" href="#/work"><span>04 · 2022–24</span><b>catholic charities</b></a>
+          <a class="foil" href="#/work"><span>05 · 2020–22</span><b>pana</b></a>
+          <div class="tag">Role: Intake Manager<br>Firm: Counts Law<br>Since: June 2026<br>Base: Los Angeles</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ticker" aria-hidden="true">
+      <div>
+        <span>Operations ✦</span><span>Client Intake ✦</span><span>Executive Support ✦</span><span>Project Coordination ✦</span><span>Payroll &amp; HR ✦</span><span>Onboarding ✦</span>
+        <span>Operations ✦</span><span>Client Intake ✦</span><span>Executive Support ✦</span><span>Project Coordination ✦</span><span>Payroll &amp; HR ✦</span><span>Onboarding ✦</span>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <div class="kicker reveal">by the numbers</div>
+      <h2 class="title reveal">proof, not promises.</h2>
+      <div class="stats">
+        <div class="stat reveal"><div class="n">2</div><p>highest-grossing sales months at Counts Law Firm</p></div>
+        <div class="stat reveal"><div class="n">3+</div><p>new restaurant openings led from permits to launch</p></div>
+        <div class="stat reveal"><div class="n">300+</div><p>biweekly timecards audited and reconciled</p></div>
+        <div class="stat reveal"><div class="n">12+</div><p>managers proctored for food manager certification</p></div>
+      </div>
+    </div>
+
+    <div class="wrap" style="padding-top:0">
+      <div class="tiles">
+        <a class="tile a reveal" href="#/work"><h3>work</h3><p>Five roles, from legal intake to restaurant openings.</p><span class="go">Explore →</span></a>
+        <a class="tile b reveal" href="#/toolkit"><h3>toolkit</h3><p>Skills, systems, and education.</p><span class="go">Explore →</span></a>
+        <a class="tile c reveal" href="#/contact"><h3>contact</h3><p>Let's talk about what you're building.</p><span class="go">Write to me →</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section class="page" data-page="work" hidden>
+    <div class="wrap">
+      <div class="kicker">experience</div>
+      <h2 class="title">the work.</h2>
+
+      <div class="role">
+        <div class="meta"><span class="when">June 2026 – Present</span><br>Counts Law Firm</div>
+        <div>
+          <h3>Intake Manager</h3>
+          <ul>
+            <li>Delivered the two highest-grossing sales months at the firm during my time here.</li>
+            <li>Point of contact for all new clients, handling all correspondence up to the consultation.</li>
+            <li>Send out signed contracts and agreements.</li>
+            <li>Schedule consultations over Zoom and use translation services such as Boostlingo to support clients in their language.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="role">
+        <div class="meta"><span class="when">Aug 2025 – Present</span><br>GoBiotix / M&amp;A Lifestyle Inc.<br>Los Angeles, CA</div>
+        <div>
+          <h3>Operations &amp; Social Media Lead</h3>
+          <ul>
+            <li>Oversee day-to-day operations and internal workflows, supporting vendor coordination and execution in a fast-paced startup.</li>
+            <li>Develop and run content strategy across social platforms, maintaining brand voice, engagement, and audience growth.</li>
+            <li>Coordinate initiatives across product, marketing, and operations, keeping timelines and deliverables aligned.</li>
+            <li>Maintain backend systems and administrative processes to improve efficiency and visibility.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="role">
+        <div class="meta"><span class="when">Apr 2024 – Jul 2025</span><br>Prince St. Pizza<br>Los Angeles, CA</div>
+        <div>
+          <h3>Senior Operations Coordinator</h3>
+          <ul>
+            <li>Drove cross-functional projects in Monday.com, coordinating timelines and communication between corporate leadership and store teams.</li>
+            <li>Led 3+ new restaurant openings, securing public health permits, coordinating utilities, and managing vendors for on-time launches.</li>
+            <li>Supported payroll with HR, auditing 300+ biweekly timecards and resolving discrepancies.</li>
+            <li>Proctored 12+ managers for food manager certification while supporting store-level execution.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="role">
+        <div class="meta"><span class="when">Dec 2022 – Jan 2024</span><br>Catholic Charities USA<br>San Diego, CA</div>
+        <div>
+          <h3>Immigration Support Specialist (Contract)</h3>
+          <ul>
+            <li>Provided Somali translation and transportation logistics, ensuring accurate, time-sensitive communication between clients, legal sponsors, and case management teams.</li>
+            <li>Assisted newly arrived asylum seekers with intake, housing assignments, and distribution of essential supplies.</li>
+            <li>Supported case managers in guiding clients through immigration documentation, legal agreements, and transitional services.</li>
+            <li>Reviewed and clarified sponsorship agreements and asylum documentation for compliance and accuracy.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="role">
+        <div class="meta"><span class="when">Apr 2020 – Nov 2022</span><br>Partnership for the Advancement of New Americans<br>San Diego, CA</div>
+        <div>
+          <h3>Team Lead</h3>
+          <ul>
+            <li>Led weekly civic education workshops for underserved youth on U.S. political systems, global conflicts, and social impact.</li>
+            <li>Designed a structured political literacy curriculum that built advocacy skills among emerging youth leaders.</li>
+            <li>Directed outreach, including phone banking and digital mobilization, to grow program participation.</li>
+            <li>Coordinated logistics for community forums, cultural events, and resource distribution.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="btns" style="margin-top:30px">
+        <a class="pill solid" href="#/contact">Work with me</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOLKIT -->
+  <section class="page" data-page="toolkit" hidden>
+    <div class="wrap">
+      <div class="kicker">skills · systems · education</div>
+      <h2 class="title">the toolkit.</h2>
+
+      <div class="kicker">skills</div>
+      <div class="cloud">
+        <span>Executive Support</span><span>Operations Coordination</span><span>Payroll &amp; HR Administration</span>
+        <span>Project Management</span><span>Multi-Location Operations</span><span>Compliance &amp; Onboarding</span>
+      </div>
+
+      <div class="kicker">systems</div>
+      <div class="cloud">
+        <span>Google Workspace</span><span>Microsoft Office</span><span>Ramp</span><span>Paylocity</span><span>Toast</span>
+        <span>Shopify</span><span>Monday.com</span><span>Slack</span><span>Notion</span>
+      </div>
+
+      <div class="edu">
+        <div class="kicker" style="color:var(--mint)">education · 2016–2020</div>
+        <h3>University of California, Los Angeles (UCLA)</h3>
+        <p>Bachelor of Arts in Political Science</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="page" data-page="contact" hidden>
+    <div class="wrap">
+      <div class="kicker">contact</div>
+      <h2 class="title">let's talk.</h2>
+      <div class="contact-grid">
+        <div class="info">
+          <p>Hiring, collaborating, or just curious? Send a note and I'll get back to you.</p>
+          <p class="kicker" style="margin-bottom:6px">email</p>
+          <a class="big-mail" href="mailto:Ashaisse@protonmail.com">Ashaisse@protonmail.com</a>
+          <p style="margin-top:22px" class="kicker">based in</p>
+          <p style="margin-top:-8px">Los Angeles, CA</p>
+        </div>
+        <form id="contactForm">
+          <div><label for="name">Your name</label><input id="name" required></div>
+          <div><label for="email">Your email</label><input id="email" type="email" required></div>
+          <div>
+            <label for="topic">What's this about?</label>
+            <select id="topic">
+              <option>A job opportunity</option>
+              <option>A project or collaboration</option>
+              <option>Just saying hello</option>
+            </select>
+          </div>
+          <div><label for="msg">Message</label><textarea id="msg" required></textarea></div>
+          <button class="pill solid" type="submit">Send message</button>
+          <p class="note" id="formNote">This opens your email app with the message ready to send.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="big">asha isse</div>
+  <p class="mono">LOS ANGELES, CA · © 2026</p>
+</footer>
+
+<script>
+(function () {
+  var pages = ['home', 'work', 'toolkit', 'contact'];
+  var titles = { home: 'asha isse', work: 'work · asha isse', toolkit: 'toolkit · asha isse', contact: 'contact · asha isse' };
+  var menu = document.getElementById('menu');
+
+  function route() {
+    var h = (location.hash || '#/home').replace('#/', '');
+    if (pages.indexOf(h) === -1) h = 'home';
+    document.querySelectorAll('.page').forEach(function (p) {
+      var on = p.getAttribute('data-page') === h;
+      p.hidden = !on;
+      p.classList.remove('show');
+      if (on) { void p.offsetWidth; p.classList.add('show'); }
+    });
+    document.querySelectorAll('#menu a').forEach(function (a) {
+      a.classList.toggle('active', a.getAttribute('data-link') === h);
+    });
+    document.title = titles[h];
+    menu.classList.remove('open');
+    window.scrollTo(0, 0);
+    observe();
+  }
+  window.addEventListener('hashchange', route);
+
+  document.getElementById('menuBtn').addEventListener('click', function () { menu.classList.add('open'); });
+  document.getElementById('menuClose').addEventListener('click', function () { menu.classList.remove('open'); });
+
+  var io = null;
+  function observe() {
+    if (!('IntersectionObserver' in window)) {
+      document.querySelectorAll('.reveal').forEach(function (e) { e.classList.add('in'); });
+      return;
+    }
+    if (!io) {
+      io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+      }, { threshold: 0.15 });
+    }
+    document.querySelectorAll('.page:not([hidden]) .reveal:not(.in)').forEach(function (e) { io.observe(e); });
+  }
+
+  var intro = document.getElementById('intro');
+  var env = document.getElementById('env');
+  env.addEventListener('click', function () {
+    if (env.classList.contains('open')) return;
+    env.classList.add('open');
+    setTimeout(function () { intro.classList.add('gone'); document.body.classList.remove('locked'); }, 1700);
+    setTimeout(function () { intro.style.display = 'none'; }, 3000);
+  });
+
+  document.getElementById('contactForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = document.getElementById('name').value;
+    var email = document.getElementById('email').value;
+    var topic = document.getElementById('topic').value;
+    var msg = document.getElementById('msg').value;
+    var body = 'Hi Asha,\n\n' + msg + '\n\n' + name + '\n' + email;
+    location.href = 'mailto:Ashaisse@protonmail.com?subject=' + encodeURIComponent(topic + ' — ' + name) + '&body=' + encodeURIComponent(body);
+    document.getElementById('formNote').textContent = 'Opening your email app… if nothing happens, email me directly at Ashaisse@protonmail.com.';
+  });
+
+  route();
+})();
+</script>
+</body>
+</html>
