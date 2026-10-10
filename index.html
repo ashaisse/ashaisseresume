@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Asha Isse</title>
 <meta name="description" content="Asha Isse: operations and client experience leader. Los Angeles, CA.">
-<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://googleapis.com" rel="stylesheet">
 <style>
   :root {
     --cream: #fffdf1;
@@ -25,50 +25,66 @@
   button { font-family: inherit; }
   h1, h2, h3, .rubik { font-family: 'Rubik', sans-serif; }
 
-  /* ---------- INTRO ---------- */
+  /* ---------- OCEAN SPLIT INTRO SCREEN ---------- */
   #intro {
-    position: fixed; inset: 0; z-index: 100; background: var(--blue); color: var(--cream);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 8vh; text-align: center; padding: 0 6vw;
-    transition: transform 1.2s cubic-bezier(.77, 0, .18, 1);
+    position: fixed; inset: 0; z-index: 100; pointer-events: none;
+    display: flex; flex-direction: row; width: 100vw; height: 100vh;
   }
-  #intro.gone { transform: translateY(-100%); }
-  .asha { display: flex; gap: 0.1em; font-family: 'Rubik', sans-serif; font-weight: 600; font-size: clamp(4rem, 21vw, 10rem); line-height: 1; }
+  
+  /* The two halves of the splitting ocean curtain */
+  .ocean-gate {
+    width: 50vw; height: 100vh; pointer-events: auto;
+    background-image: url('https://fineartamerica.com');
+    background-size: 200% 100%; background-repeat: no-repeat;
+    box-shadow: inset 0 0 100px rgba(8, 28, 52, 0.4);
+    transition: transform 1.6s cubic-bezier(.77, 0, .18, 1);
+    position: relative; display: flex; flex-direction: column; justify-content: center;
+  }
+  .ocean-left {
+    background-position: left center; border-right: 1px solid rgba(255,255,255,0.15);
+    align-items: flex-end; padding-right: 2vw;
+  }
+  .ocean-right {
+    background-position: right center; border-left: 1px solid rgba(255,255,255,0.15);
+    align-items: flex-start; padding-left: 2vw;
+  }
+
+  /* When the gate triggers open */
+  #intro.gone .ocean-left { transform: translateX(-100%); }
+  #intro.gone .ocean-right { transform: translateX(100%); }
+
+  /* Centered Typography Context Layer */
+  .intro-overlay {
+    position: absolute; inset: 0; z-index: 105; pointer-events: none;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 4vh; text-align: center; color: var(--cream); padding: 0 6vw;
+    transition: opacity 0.8s ease;
+  }
+  #intro.gone .intro-overlay { opacity: 0; }
+
+  /* Animated typography layouts */
+  .asha { display: flex; gap: 0.1em; font-family: 'Rubik', sans-serif; font-weight: 600; font-size: clamp(4rem, 15vw, 9rem); line-height: 1; text-shadow: 0 4px 20px rgba(0,0,0,0.3); }
   .asha span { display: inline-block; opacity: 0; transform: translateY(40px); animation: rise 0.9s cubic-bezier(.2, .8, .2, 1) forwards; }
   .asha span:nth-child(1) { animation-delay: 0.15s; }
   .asha span:nth-child(2) { animation-delay: 0.35s; }
   .asha span:nth-child(3) { animation-delay: 0.55s; }
   .asha span:nth-child(4) { animation-delay: 0.75s; }
+  
   @keyframes rise { to { opacity: 1; transform: none; } }
   @keyframes fadein { to { opacity: 1; } }
-  .env {
-    position: relative; width: min(300px, 74vw); aspect-ratio: 3 / 2; background: none; border: 0; cursor: pointer;
-    perspective: 900px; opacity: 0; animation: fadein 0.9s 1.5s forwards; transition: transform 0.4s;
-    filter: drop-shadow(0 18px 30px rgba(8, 28, 52, 0.4));
+
+  /* Serene interactive call to action button */
+  .ocean-trigger {
+    background: transparent; border: 2px solid var(--cream); color: var(--cream);
+    font-family: 'Rubik', sans-serif; font-weight: 500; font-size: 0.85rem; letter-spacing: 0.25em; text-transform: uppercase;
+    padding: 16px 40px; border-radius: 999px; cursor: pointer; pointer-events: auto;
+    opacity: 0; animation: fadein 1s 1.4s forwards;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2); backdrop-filter: blur(4px);
+    transition: background 0.3s, color 0.3s, transform 0.3s;
   }
-  .env .back { position: absolute; inset: 0; background: #f2ecd6; border-radius: 4px; }
-  .env .letter {
-    position: absolute; left: 8%; right: 8%; top: 8%; height: 84%; background: #fff; border-radius: 3px; z-index: 2;
-    display: flex; flex-direction: column; justify-content: center; gap: 12px; padding: 0 16%;
-    transition: transform 1s 0.4s cubic-bezier(.2, .8, .2, 1);
-  }
-  .env .letter i { display: block; height: 1px; background: var(--sky); }
-  .env .letter i:nth-child(2) { width: 70%; }
-  .env .letter i:nth-child(3) { width: 85%; }
-  .env .front { position: absolute; inset: 0; z-index: 3; background: #fbf6e3; border-radius: 4px; clip-path: polygon(0 0, 50% 54%, 100% 0, 100% 100%, 0 100%); }
-  .env .flap {
-    position: absolute; left: 0; right: 0; top: 0; height: 58%; z-index: 4; background: #ece4c8; transform-origin: top center;
-    clip-path: polygon(0 0, 100% 0, 50% 100%); transition: transform 0.7s, z-index 0s 0.35s;
-  }
-  .env .seal {
-    position: absolute; left: 50%; top: 50%; width: 15%; aspect-ratio: 1; z-index: 5; transform: translate(-50%, -50%); border-radius: 50%;
-    background: radial-gradient(circle at 35% 30%, #5f93c6, var(--blue) 60%, var(--blue-deep)); box-shadow: 0 3px 8px rgba(0,0,0,0.3); transition: opacity 0.3s;
-  }
-  .env.open .seal { opacity: 0; }
-  .env.open .flap { transform: rotateX(180deg); z-index: 1; }
-  .env.open .letter { transform: translateY(-72%); }
-  .env:hover:not(.open) { transform: translateY(-5px); }
-  .hint { font-family: 'Rubik', sans-serif; font-size: 0.75rem; letter-spacing: 0.4em; text-transform: uppercase; opacity: 0; animation: fadein 0.9s 2s forwards; }
+  .ocean-trigger:hover { background: var(--cream); color: var(--blue-deep); transform: scale(1.03); }
+
+  .hint { font-family: 'Rubik', sans-serif; font-size: 0.78rem; letter-spacing: 0.3em; text-transform: uppercase; opacity: 0; animation: fadein 0.9s 1.8s forwards; color: var(--sky); text-shadow: 0 2px 8px rgba(0,0,0,0.2); }
 
   /* ---------- NAV ---------- */
   header.top {
@@ -106,14 +122,27 @@
   .row h3 { font-weight: 500; font-size: 1.6rem; line-height: 1.2; }
   .row p { font-size: 1.12rem; font-weight: 300; }
 
-  /* hero */
-  .hero { padding: 12vh 0 11vh; }
+  /* ---------- HERO & BACKDROP INTEGRATION ---------- */
+  .hero { 
+    position: relative; padding: 14vh 0 12vh; overflow: hidden;
+  }
+  
+  /* Serene structural background wrapper behind hero layout text fields */
+  .hero-backdrop {
+    position: absolute; inset: 0; z-index: -1; opacity: 0.12; pointer-events: none;
+    background-image: url('https://fineartamerica.com');
+    background-size: cover; background-position: center bottom;
+    filter: saturate(0.6) blue;
+  }
+
   .hero .eyebrow { font-family: 'Rubik', sans-serif; font-size: 0.8rem; letter-spacing: 0.26em; text-transform: uppercase; color: var(--blue); margin-bottom: 20px; }
-  .hero h1 { font-weight: 600; text-transform: uppercase; font-size: clamp(4rem, 15vw, 10.5rem); line-height: 0.9; letter-spacing: -0.03em; margin-bottom: 30px; }
-  .hero p.lead { max-width: 640px; font-size: 1.28rem; margin-bottom: 38px; }
+  .hero h1 { font-weight: 600; text-transform: uppercase; font-size: clamp(3.2rem, 12vw, 9.5rem); line-height: 0.95; letter-spacing: -0.03em; margin-bottom: 30px; }
+  .hero p.lead { max-width: 680px; font-size: 1.35rem; margin-bottom: 38px; line-height: 1.8; font-weight: 300; }
+  
   .circled { position: relative; display: inline-block; font-weight: 600; color: var(--blue); padding: 0 4px; }
   .circled svg { position: absolute; left: -12px; right: -12px; top: -10px; bottom: -10px; width: calc(100% + 24px); height: calc(100% + 20px); pointer-events: none; }
   .circled svg path { fill: none; stroke: var(--blue); stroke-width: 2; stroke-linecap: round; }
+  
   .btns { display: flex; gap: 14px; flex-wrap: wrap; }
   .btn {
     display: inline-block; font-family: 'Rubik', sans-serif; font-weight: 500; font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase;
@@ -124,402 +153,39 @@
   .btn.ghost { background: transparent; color: var(--blue); }
   .btn.ghost:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
 
-  /* stats */
-  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0; border-top: 1px solid rgba(43, 91, 138, 0.35); }
+  /* ---------- STATS SECTION (REPAIRED & CLEANED) ---------- */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0; border-top: 1px solid rgba(43, 91, 138, 0.35); margin-top: 6vh; }
   .stat { padding: 34px 24px 34px 0; border-bottom: 1px solid rgba(43, 91, 138, 0.35); }
   .stat .n { font-family: 'Rubik', sans-serif; font-weight: 600; font-size: clamp(3.4rem, 9vw, 5.4rem); line-height: 1; color: var(--blue); }
-  .stat p { margin-top: 10px; max-width: 240px; font-size: 1rem; }
-
-  /* logo cards */
-  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 18px; }
-  .card {
-    display: flex; flex-direction: column; justify-content: space-between; min-height: 200px; border: 1px solid rgba(43, 91, 138, 0.35);
-    border-radius: 24px; padding: 24px; text-decoration: none; transition: transform 0.35s, background 0.35s, color 0.35s;
-  }
-  .card:hover { transform: translateY(-6px); background: var(--blue); color: #fff; }
-  .card .when { font-family: 'Rubik', sans-serif; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.75; }
-  .card h3 { font-weight: 500; font-size: 1.2rem; line-height: 1.25; margin-top: 12px; }
-  .card p { font-size: 0.9rem; }
-  .logo-slot { height: 54px; display: flex; align-items: center; }
-  .logo-slot img { max-height: 54px; max-width: 150px; object-fit: contain; }
-  .card:hover .logo-slot img { filter: brightness(0) invert(1); }
-  .wordmark { font-family: 'Rubik', sans-serif; font-weight: 600; font-size: 1rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--blue); }
-  .card:hover .wordmark { color: #fff; }
-  img[data-base] { display: none; }
-  img[data-base].ok { display: block; }
-
-  /* case studies */
-  .case { padding: 8vh 0 0; }
-  .case-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 18px; }
-  .case .logo-slot { height: 64px; }
-  .case .logo-slot img { max-height: 64px; max-width: 200px; }
-  dl.meta { display: grid; grid-template-columns: minmax(120px, 240px) 1fr; gap: 10px clamp(1rem, 5vw, 4rem); margin: 24px 0 34px; }
-  dl.meta dt { font-family: 'Rubik', sans-serif; font-weight: 500; }
-  dl.meta dd { font-weight: 300; }
-  figure.photo { display: none; margin-bottom: 40px; }
-  figure.photo.ok { display: block; }
-  figure.photo img { width: 100%; max-height: 560px; object-fit: cover; border-radius: 28px; display: block; }
-
-  .tags { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 36px; }
-  .tags span { border: 1.5px solid #fff; border-radius: 999px; padding: 8px 22px; font-size: 0.95rem; }
-  .tags.dark span { border-color: var(--blue); color: var(--blue); }
-  .about-grid { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 6vw; align-items: start; }
-  .about-grid figure.photo { margin-bottom: 0; }
-
-  /* contact */
-  .contact-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 6vw; }
-  .big-mail { font-family: 'Rubik', sans-serif; font-weight: 500; font-size: clamp(1.3rem, 4vw, 1.9rem); color: var(--blue); word-break: break-all; text-decoration: none; border-bottom: 2px solid var(--blue); }
-  form { display: flex; flex-direction: column; gap: 22px; }
-  label { font-family: 'Rubik', sans-serif; font-weight: 500; font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase; display: block; margin-bottom: 6px; color: var(--blue); }
-  input, textarea, select {
-    width: 100%; border: 0; border-bottom: 1.5px solid var(--ink); border-radius: 0; padding: 12px 2px;
-    font-family: 'Nunito Sans', sans-serif; font-weight: 300; font-size: 1.1rem; color: var(--ink); background: transparent;
-  }
-  input:focus, textarea:focus, select:focus { outline: none; border-bottom: 2.5px solid var(--blue); }
-  textarea { min-height: 130px; resize: vertical; }
-  .note { font-size: 0.88rem; opacity: 0.75; }
-
-  footer { background: var(--blue); color: #fff; text-align: center; padding: 8vh 5vw; }
-  footer .big { font-family: 'Rubik', sans-serif; font-weight: 600; text-transform: uppercase; font-size: clamp(2.6rem, 10vw, 6rem); line-height: 1; letter-spacing: -0.02em; }
-  footer p { margin-top: 14px; font-family: 'Rubik', sans-serif; font-size: 0.72rem; letter-spacing: 0.28em; text-transform: uppercase; opacity: 0.8; }
-
-  @media (max-width: 760px) {
-    .row, dl.meta, .about-grid, .contact-grid { grid-template-columns: 1fr; }
-    .row { gap: 0.6rem; }
-    header.top { justify-content: center; }
-    nav.links a:first-child { margin-left: 0; }
-  }
-  @media (prefers-reduced-motion: reduce) { * { animation-duration: 0.01s !important; transition-duration: 0.01s !important; } }
+  .stat p { margin-top: 10px; max-width: 240px; font-weight: 400; font-size: 0.95rem; color: var(--ink); opacity: 0.85; }
 </style>
 </head>
 <body class="locked">
 
-<!-- INTRO -->
-<div id="intro">
-  <div class="asha" aria-label="Asha"><span>A</span><span>S</span><span>H</span><span>A</span></div>
-  <button class="env" id="env" aria-label="Open the envelope to enter the website">
-    <div class="back"></div>
-    <div class="letter"><i></i><i></i><i></i></div>
-    <div class="front"></div>
-    <div class="flap"></div>
-    <div class="seal"></div>
-  </button>
-  <div class="hint">open</div>
-</div>
-
-<header class="top">
-  <a class="logo" href="#/home">Asha Isse</a>
-  <nav class="links" aria-label="Main">
-    <a href="#/home" data-link="home">Home</a>
-    <a href="#/work" data-link="work">Work</a>
-    <a href="#/about" data-link="about">About</a>
-    <a href="#/contact" data-link="contact">Contact</a>
-  </nav>
-</header>
-
-<main>
-
-<!-- ================= HOME ================= -->
-<section class="page" data-page="home">
-  <div class="wrap hero">
-    <div class="eyebrow">Operations &amp; Client Experience · Los Angeles</div>
-    <h1>Asha<br>Isse</h1>
-    <p class="lead">I run the machinery behind exceptional companies: client intake that
-      <span class="circled">converts<svg viewBox="0 0 200 60" preserveAspectRatio="none"><path d="M10,32 C8,10 190,2 193,28 C196,54 22,58 12,36"/></svg></span>,
-      launches that land on time, and systems that free leadership to focus on the vision.</p>
-    <div class="btns">
-      <a class="btn" href="#/work">View the work</a>
-      <a class="btn ghost" href="#/contact">Start a conversation</a>
-    </div>
-  </div>
-
-  <svg class="wave to-blue" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0,70 C300,10 520,0 760,40 C1000,80 1220,70 1440,20 L1440,120 L0,120 Z"/></svg>
-  <div class="panel">
-    <div class="wrap sec">
-      <h2 class="sec-title">01. What I do</h2>
-      <div class="row"><h3>Client Intake</h3><p>The first impression is the whole relationship. I own the journey from first inquiry to signed agreement, across languages and time zones.</p></div>
-      <div class="row"><h3>Launch Operations</h3><p>Permits, utilities, vendors, and teams: I take new locations from blueprint to opening day, on schedule and to standard.</p></div>
-      <div class="row"><h3>Systems &amp; Process</h3><p>Payroll, compliance, onboarding, and project tracking, built so a growing organization stays clear, accurate, and aligned.</p></div>
-      <div class="row"><h3>Executive Support</h3><p>I protect leadership's attention by running communication and backend operations without friction.</p></div>
-    </div>
-  </div>
-  <svg class="wave to-cream" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0,70 C300,10 520,0 760,40 C1000,80 1220,70 1440,20 L1440,120 L0,120 Z"/></svg>
-
-  <div class="wrap sec">
-    <h2 class="sec-title">02. By the numbers</h2>
-    <div class="stats">
-      <div class="stat"><div class="n">6+</div><p>restaurant openings led, from permits to launch day</p></div>
-      <div class="stat"><div class="n">300+</div><p>timecards audited every pay period</p></div>
-      <div class="stat"><div class="n">12+</div><p>managers proctored through food manager certification</p></div>
-      <div class="stat"><div class="n">2</div><p>highest-grossing sales months at Counts Law Firm</p></div>
-      <div class="stat"><div class="n">5</div><p>organizations across law, hospitality, startups, and nonprofit</p></div>
-    </div>
-  </div>
-
-  <div class="wrap sec" style="padding-top:0">
-    <h2 class="sec-title">03. Where I've worked</h2>
-    <div class="cards">
-      <a class="card" href="#/work"><div><div class="logo-slot"><img data-base="logos/counts" data-fallback="Counts Law Firm" alt="Counts Law Firm logo"></div></div><div><div class="when">2026 – Now</div><h3>Counts Law Firm</h3><p>Intake Manager</p></div></a>
-      <a class="card" href="#/work"><div><div class="logo-slot"><img data-base="logos/gobiotix" data-fallback="GoBiotix" alt="GoBiotix logo"></div></div><div><div class="when">2025 – Now</div><h3>GoBiotix</h3><p>Operations &amp; Social Media Lead</p></div></a>
-      <a class="card" href="#/work"><div><div class="logo-slot"><img data-base="logos/princst" data-fallback="Prince St. Pizza" alt="Prince St. Pizza logo"></div></div><div><div class="when">2024 – 2025</div><h3>Prince St. Pizza</h3><p>Senior Operations Coordinator</p></div></a>
-      <a class="card" href="#/work"><div><div class="logo-slot"><img data-base="logos/catholic-charities" data-fallback="Catholic Charities USA" alt="Catholic Charities USA logo"></div></div><div><div class="when">2022 – 2024</div><h3>Catholic Charities USA</h3><p>Immigration Support Specialist</p></div></a>
-      <a class="card" href="#/work"><div><div class="logo-slot"><img data-base="logos/pana" data-fallback="PANA" alt="Partnership for the Advancement of New Americans logo"></div></div><div><div class="when">2020 – 2022</div><h3>PANA</h3><p>Team Lead</p></div></a>
-    </div>
-  </div>
-</section>
-
-<!-- ================= WORK ================= -->
-<section class="page" data-page="work" hidden>
-  <div class="wrap sec" style="padding-bottom:0">
-    <div class="sub">Selected work</div>
-    <h2 class="sec-title">Five roles. One standard.</h2>
-    <p class="intro-text">Each role began with a problem worth solving. Here is how I approached it and what changed.</p>
-  </div>
-
-  <!-- Counts -->
-  <div class="wrap case">
-    <div class="case-top"><h2 class="sec-title" style="margin:0">01. Counts Law Firm</h2><div class="logo-slot"><img data-base="logos/counts" data-fallback="Counts Law Firm" alt="Counts Law Firm logo"></div></div>
-    <dl class="meta">
-      <dt>Role</dt><dd>Intake Manager</dd>
-      <dt>Timeline</dt><dd>June 2026 – Present</dd>
-      <dt>Toolkit</dt><dd>Zoom, Boostlingo, client agreements</dd>
-    </dl>
-    <figure class="photo"><img data-base="photos/counts" data-hide alt="Counts Law Firm"></figure>
-  </div>
-  <svg class="wave to-blue" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0,70 C300,10 520,0 760,40 C1000,80 1220,70 1440,20 L1440,120 L0,120 Z"/></svg>
-  <div class="panel"><div class="wrap sec">
-    <div class="row"><h3>Challenge</h3><p>Be the first impression of the firm for every prospective client, many of whom need support in their own language, and turn that first inquiry into a signed agreement.</p></div>
-    <div class="row"><h3>Approach</h3><p>Own the entire pre-consultation journey: responsive correspondence, delivery of contracts and agreements, Zoom consultation scheduling, and interpreter coordination through Boostlingo.</p></div>
-    <div class="row"><h3>Impact</h3><p>Delivered the firm's two highest-grossing sales months during my tenure, while serving as the point of contact for every new client from first inquiry to consultation.</p></div>
-  </div></div>
-  <svg class="wave to-cream" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0,70 C300,10 520,0 760,40 C1000,80 1220,70 1440,20 L1440,120 L0,120 Z"/></svg>
-
-  <!-- GoBiotix -->
-  <div class="wrap case">
-    <div class="case-top"><h2 class="sec-title" style="margin:0">02. GoBiotix</h2><div class="logo-slot"><img data-base="logos/gobiotix" data-fallback="GoBiotix" alt="GoBiotix logo"></div></div>
-    <dl class="meta">
-      <dt>Role</dt><dd>Operations &amp; Social Media Lead</dd>
-      <dt>Organization</dt><dd>GoBiotix / M&amp;A Lifestyle Inc., Los Angeles</dd>
-      <dt>Timeline</dt><dd>August 2025 – Present</dd>
-      <dt>Toolkit</dt><dd>Content strategy, vendor coordination, internal systems</dd>
-    </dl>
-    <figure class="photo"><img data-base="photos/gobiotix" data-hide alt="GoBiotix"></figure>
-  </div>
-  <svg class="wave to-blue" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0,70 C300,10 520,0 760,40 C1000,80 1220,70 1440,20 L1440,120 L0,120 Z"/></svg>
-  <div class="panel"><div class="wrap sec">
-    <div class="row"><h3>Challenge</h3><p>Give a fast-moving startup the operational backbone and a consistent brand voice it needs to scale.</p></div>
-    <div class="row"><h3>Approach</h3><p>Run day-to-day operations and internal workflows, align product, marketing, and operations on shared timelines and deliverables, and lead content strategy across social platforms.</p></div>
-    <div class="row"><h3>Impact</h3><p>Improved efficiency, visibility, and structure across backend systems and administrative processes, while sustaining brand voice, engagement, and audience growth.</p></div>
-  </div></div>
-  <svg class="wave to-cream" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0,70 C300,10 520,0 760,40 C1000,80 1220,70 1440,20 L1440,120 L0,120 Z"/></svg>
-
-  <!-- Prince St -->
-  <div class="wrap case">
-    <div class="case-top"><h2 class="sec-title" style="margin:0">03. Prince St. Pizza</h2><div class="logo-slot"><img data-base="logos/princst" data-fallback="Prince St. Pizza" alt="Prince St. Pizza logo"></div></div>
-    <dl class="meta">
-      <dt>Role</dt><dd>Senior Operations Coordinator</dd>
-      <dt>Location</dt><dd>Los Angeles, CA</dd>
-      <dt>Timeline</dt><dd>April 2024 – July 2025</dd>
-      <dt>Toolkit</dt><dd>Monday.com, payroll and timekeeping systems</dd>
-    </dl>
-    <figure class="photo"><img data-base="photos/princst" data-hide alt="Prince St. Pizza"></figure>
-  </div>
-  <svg class="wave to-blue" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0,70 C300,10 520,0 760,40 C1000,80 1220,70 1440,20 L1440,120 L0,120 Z"/></svg>
-  <div class="panel"><div class="wrap sec">
-    <div class="row"><h3>Challenge</h3><p>Open new restaurants on schedule while keeping a growing, multi-store team aligned with corporate standards.</p></div>
-    <div class="row"><h3>Approach</h3><p>Drove cross-functional projects in Monday.com, secured public health permits, coordinated utilities, managed vendors, partnered with HR on payroll accuracy, and certified managers for food safety.</p></div>
-    <div class="row"><h3>Impact</h3><p>Led 6+ restaurant openings launch-ready, audited 300+ biweekly timecards and resolved discrepancies, and proctored 12+ managers through food manager certification.</p></div>
-  </div></div>
-  <svg class="wave to-cream" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0,70 C300,10 520,0 760,40 C1000,80 1220,70 1440,20 L1440,120 L0,120 Z"/></svg>
-
-  <!-- Catholic Charities -->
-  <div class="wrap case">
-    <div class="case-top"><h2 class="sec-title" style="margin:0">04. Catholic Charities USA</h2><div class="logo-slot"><img data-base="logos/catholic-charities" data-fallback="Catholic Charities USA" alt="Catholic Charities USA logo"></div></div>
-    <dl class="meta">
-      <dt>Role</dt><dd>Immigration Support Specialist (Contract)</dd>
-      <dt>Location</dt><dd>San Diego, CA</dd>
-      <dt>Timeline</dt><dd>December 2022 – January 2024</dd>
-      <dt>Toolkit</dt><dd>Somali translation, intake, case management coordination</dd>
-    </dl>
-    <figure class="photo"><img data-base="photos/catholic-charities" data-hide alt="Catholic Charities USA"></figure>
-  </div>
-  <svg class="wave to-blue" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0,70 C300,10 520,0 760,40 C1000,80 1220,70 1440,20 L1440,120 L0,120 Z"/></svg>
-  <div class="panel"><div class="wrap sec">
-    <div class="row"><h3>Challenge</h3><p>Provide accurate, time-sensitive support to newly arrived asylum seekers navigating a complex legal and logistical system.</p></div>
-    <div class="row"><h3>Approach</h3><p>Delivered Somali translation and transportation logistics, handled intake, housing assignments, and essential supplies, and worked alongside case managers to guide clients through immigration documentation and agreements.</p></div>
-    <div class="row"><h3>Impact</h3><p>Kept communication precise between clients, legal sponsors, and case teams, and supported high-volume caseload resolution by clarifying sponsorship agreements and asylum documentation for compliance and accuracy.</p></div>
-  </div></div>
-  <svg class="wave to-cream" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0,70 C300,10 520,0 760,40 C1000,80 1220,70 1440,20 L1440,120 L0,120 Z"/></svg>
-
-  <!-- PANA -->
-  <div class="wrap case">
-    <div class="case-top"><h2 class="sec-title" style="margin:0">05. PANA</h2><div class="logo-slot"><img data-base="logos/pana" data-fallback="PANA" alt="Partnership for the Advancement of New Americans logo"></div></div>
-    <dl class="meta">
-      <dt>Role</dt><dd>Team Lead</dd>
-      <dt>Organization</dt><dd>Partnership for the Advancement of New Americans, San Diego</dd>
-      <dt>Timeline</dt><dd>April 2020 – November 2022</dd>
-      <dt>Toolkit</dt><dd>Curriculum design, community outreach, phone banking</dd>
-    </dl>
-    <figure class="photo"><img data-base="photos/pana" data-hide alt="PANA"></figure>
-  </div>
-  <svg class="wave to-blue" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0,70 C300,10 520,0 760,40 C1000,80 1220,70 1440,20 L1440,120 L0,120 Z"/></svg>
-  <div class="panel"><div class="wrap sec">
-    <div class="row"><h3>Challenge</h3><p>Build political literacy and civic confidence among underserved youth.</p></div>
-    <div class="row"><h3>Approach</h3><p>Led weekly civic education workshops, designed a structured political literacy curriculum, directed outreach through phone banking and digital mobilization, and coordinated community forums and cultural events.</p></div>
-    <div class="row"><h3>Impact</h3><p>Strengthened advocacy skills and community engagement among emerging youth leaders and expanded participation in the program.</p></div>
-  </div></div>
-  <svg class="wave to-cream" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0,70 C300,10 520,0 760,40 C1000,80 1220,70 1440,20 L1440,120 L0,120 Z"/></svg>
-
-  <div class="wrap sec" style="text-align:center">
-    <h2 class="sec-title">Want results like these?</h2>
-    <div class="btns" style="justify-content:center"><a class="btn" href="#/contact">Let's talk</a></div>
-  </div>
-</section>
-
-<!-- ================= ABOUT ================= -->
-<section class="page" data-page="about" hidden>
-  <div class="wrap sec">
-    <div class="about-grid">
-      <figure class="photo"><img data-base="photos/asha" data-hide alt="Asha Isse"></figure>
-      <div>
-        <div class="sub">About</div>
-        <h2 class="sec-title">Built for the moments that matter.</h2>
-        <p class="intro-text" style="margin-bottom:18px">I'm Asha Isse, an operations and client experience leader based in Los Angeles. I've supported executives and multi-location teams across law, hospitality, startups, and nonprofit work, always at the point where people, process, and trust meet.</p>
-        <p class="intro-text" style="margin-bottom:0">I work in English and Somali, and I hold a B.A. in Political Science from UCLA.</p>
+  <!-- OCEAN SPLIT CONTAINER SCREEN -->
+  <div id="intro">
+    <div class="ocean-gate ocean-left"></div>
+    <div class="ocean-gate ocean-right"></div>
+    
+    <div class="intro-overlay">
+      <div class="asha">
+        <span>A</span><span>S</span><span>H</span><span>A</span>
       </div>
+      <button class="ocean-trigger" onclick="openWebsite()">Let Me Take Over Serene Energy</button>
+      <div class="hint">Building on the wave of tranquility</div>
     </div>
   </div>
 
-  <svg class="wave to-blue" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0,70 C300,10 520,0 760,40 C1000,80 1220,70 1440,20 L1440,120 L0,120 Z"/></svg>
-  <div class="panel"><div class="wrap sec">
-    <h2 class="sec-title">Toolkit</h2>
-    <div class="sub" style="color:var(--sky)">Skills</div>
-    <div class="tags">
-      <span>Executive Support</span><span>Operations Coordination</span><span>Payroll &amp; HR Administration</span>
-      <span>Project Management</span><span>Multi-Location Operations</span><span>Compliance &amp; Onboarding</span>
-    </div>
-    <div class="sub" style="color:var(--sky)">Systems</div>
-    <div class="tags" style="margin-bottom:0">
-      <span>Google Workspace</span><span>Microsoft Office</span><span>Ramp</span><span>Paylocity</span><span>Toast</span>
-      <span>Shopify</span><span>Monday.com</span><span>Slack</span><span>Notion</span>
-    </div>
-  </div></div>
-  <svg class="wave to-cream" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0,70 C300,10 520,0 760,40 C1000,80 1220,70 1440,20 L1440,120 L0,120 Z"/></svg>
+  <!-- STICKY TOP NAVIGATION -->
+  <header class="top">
+    <a href="#" class="logo">Asha Isse</a>
+    <nav class="links">
+      <a href="#home" class="active">Home</a>
+      <a href="#about">About</a>
+      <a href="#work">Work</a>
+    </nav>
+  </header>
 
-  <div class="wrap sec">
-    <h2 class="sec-title">Education</h2>
-    <div class="case-top"><div><div class="sub" style="margin-bottom:6px">University of California, Los Angeles</div><p>Bachelor of Arts in Political Science · 2016 – 2020</p></div><div class="logo-slot"><img data-base="logos/ucla" data-fallback="UCLA" alt="UCLA logo"></div></div>
-  </div>
-</section>
+  <!-- HOME PAGE CONTAINER -->
+  <main class="page show" id="home">
 
-<!-- ================= CONTACT ================= -->
-<section class="page" data-page="contact" hidden>
-  <div class="wrap sec">
-    <div class="sub">Contact</div>
-    <h2 class="sec-title">Let's talk.</h2>
-    <div class="contact-grid">
-      <div>
-        <p class="intro-text" style="margin-bottom:28px">Hiring, collaborating, or curious about how I work? Send a note and I'll get back to you.</p>
-        <div class="sub" style="font-size:0.85rem;margin-bottom:6px">Email</div>
-        <a class="big-mail" href="mailto:Ashaisse@protonmail.com">Ashaisse@protonmail.com</a>
-        <div class="sub" style="font-size:0.85rem;margin:28px 0 6px">Based in</div>
-        <p>Los Angeles, CA</p>
-      </div>
-      <form id="contactForm">
-        <div><label for="name">Your name</label><input id="name" required></div>
-        <div><label for="email">Your email</label><input id="email" type="email" required></div>
-        <div>
-          <label for="topic">What's this about?</label>
-          <select id="topic"><option>A job opportunity</option><option>A project or collaboration</option><option>Just saying hello</option></select>
-        </div>
-        <div><label for="msg">Message</label><textarea id="msg" required></textarea></div>
-        <button class="btn" type="submit">Send message</button>
-        <p class="note" id="formNote">This opens your email app with the message ready to send.</p>
-      </form>
-    </div>
-  </div>
-</section>
-
-</main>
-
-<footer>
-  <div class="big">Asha Isse</div>
-  <p>Los Angeles, CA · © 2026</p>
-</footer>
-
-<script>
-(function () {
-  var pages = ['home', 'work', 'about', 'contact'];
-  var titles = { home: 'Asha Isse', work: 'Work · Asha Isse', about: 'About · Asha Isse', contact: 'Contact · Asha Isse' };
-
-  function route() {
-    var h = (location.hash || '#/home').replace('#/', '');
-    if (pages.indexOf(h) === -1) h = 'home';
-    document.querySelectorAll('.page').forEach(function (p) {
-      var on = p.getAttribute('data-page') === h;
-      p.hidden = !on;
-      p.classList.remove('show');
-      if (on) { void p.offsetWidth; p.classList.add('show'); }
-    });
-    document.querySelectorAll('nav.links a').forEach(function (a) {
-      a.classList.toggle('active', a.getAttribute('data-link') === h);
-    });
-    document.title = titles[h];
-    window.scrollTo(0, 0);
-  }
-  window.addEventListener('hashchange', route);
-
-  /* images: try common file types; fall back to a text wordmark (logos) or hide the photo */
-  var exts = ['png', 'jpg', 'jpeg', 'webp', 'svg'];
-  function tryLoad(img, base, i) {
-    if (i >= exts.length) { fail(img); return; }
-    var t = new Image();
-    t.onload = function () {
-      img.src = base + '.' + exts[i];
-      img.classList.add('ok');
-      var fig = img.closest('figure');
-      if (fig) fig.classList.add('ok');
-    };
-    t.onerror = function () { tryLoad(img, base, i + 1); };
-    t.src = base + '.' + exts[i];
-  }
-  function fail(img) {
-    var label = img.getAttribute('data-fallback');
-    if (label) {
-      var s = document.createElement('span');
-      s.className = 'wordmark';
-      s.textContent = label;
-      img.parentNode.appendChild(s);
-    }
-  }
-  document.querySelectorAll('img[data-base]').forEach(function (img) {
-    tryLoad(img, img.getAttribute('data-base'), 0);
-  });
-
-  /* envelope intro */
-  var intro = document.getElementById('intro');
-  var env = document.getElementById('env');
-  env.addEventListener('click', function () {
-    if (env.classList.contains('open')) return;
-    env.classList.add('open');
-    setTimeout(function () { intro.classList.add('gone'); document.body.classList.remove('locked'); }, 1800);
-    setTimeout(function () { intro.style.display = 'none'; }, 3200);
-  });
-
-  /* contact form */
-  document.getElementById('contactForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-    var name = document.getElementById('name').value;
-    var email = document.getElementById('email').value;
-    var topic = document.getElementById('topic').value;
-    var msg = document.getElementById('msg').value;
-    var body = 'Hi Asha,\n\n' + msg + '\n\n' + name + '\n' + email;
-    location.href = 'mailto:Ashaisse@protonmail.com?subject=' + encodeURIComponent(topic + ' - ' + name) + '&body=' + encodeURIComponent(body);
-    document.getElementById('formNote').textContent = 'Opening your email app. If nothing happens, email me directly at Ashaisse@protonmail.com.';
-  });
-
-  route();
-})();
-</script>
-</body>
-</html>
